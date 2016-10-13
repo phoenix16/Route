@@ -5,12 +5,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -54,7 +54,6 @@ public class MapsActivity extends AppCompatActivity implements
     Marker mCurrLocationMarker;
     private static final String TAG = MapsActivity.class.getSimpleName();
 
-    private OurFingerPrint mOurFingerPrint;
     public static boolean mMapIsTouched = false;
 
     LatLng myPosition;
@@ -62,6 +61,17 @@ public class MapsActivity extends AppCompatActivity implements
 
     LatLng dest1 = new LatLng(37.774929, -122.419416); // SF
     LatLng dest2 = new LatLng(34.052234, -118.243685); // LA
+    LatLng dest3 = new LatLng(40.712784, -74.005941);  // NY
+
+    // ====================== Set up timer to keep listening to fingerprint ======================//
+    private Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            startIdentify();
+            timerHandler.postDelayed(this, 500);
+        }
+    };
 
     // ====================== Fingerprint related variables=======================================//
 
@@ -117,73 +127,20 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     // ====================== Set up Spass Fingerprint listener Object ===========================//
-//
-//    private SpassFingerprint.IdentifyListener mIdentifyListener = new SpassFingerprint.IdentifyListener() {
-//        @Override
-//        public void onFinished(int eventStatus)
-//        {
-//            int FingerprintIndex = 0;
-//            String FingerprintGuideText = null;
-//            try {
-//                FingerprintIndex = mSpassFingerprint.getIdentifiedFingerprintIndex();
-//            } catch (IllegalStateException ise) {
-//            }
-//            if (eventStatus == SpassFingerprint.STATUS_AUTHENTIFICATION_SUCCESS)
-//            {
-//                fingerprintAction(FingerprintIndex);
-//            }
-//            else if (eventStatus == SpassFingerprint.STATUS_TIMEOUT_FAILED)
-//            {
-//                Log.d(TAG, "!!!!!!!!! TIME OUT !!!!!!!!!!!!!!!!");
-//            }
-//            else if (eventStatus == SpassFingerprint.STATUS_QUALITY_FAILED)
-//            {
-//                needRetryIdentify = true;
-//                FingerprintGuideText = mSpassFingerprint.getGuideForPoorQuality();
-//                Toast.makeText(mContext, FingerprintGuideText, Toast.LENGTH_SHORT).show();
-//            }
-//            else {
-//                needRetryIdentify = true;
-//            }
-//            if (!needRetryIdentify) {
-//                resetIdentifyIndex();
-//            }
-//        }
-//
-//        @Override
-//        public void onReady() {
-//        }
-//
-//        @Override
-//        public void onStarted() {
-//        }
-//
-//        @Override
-//        public void onCompleted()
-//        {
-//            onReadyIdentify = false;
-//            if (needRetryIdentify)
-//            {
-//                needRetryIdentify = false;
-//            }
-//        }
-//    };
 
-    private class OurFingerPrint implements SpassFingerprint.IdentifyListener
-    {
+    private SpassFingerprint.IdentifyListener mIdentifyListener = new SpassFingerprint.IdentifyListener() {
         @Override
         public void onFinished(int eventStatus)
         {
-            int fingerprintIndex = 0;
+            int FingerprintIndex = 0;
             String FingerprintGuideText = null;
             try {
-                fingerprintIndex = mSpassFingerprint.getIdentifiedFingerprintIndex();
+                FingerprintIndex = mSpassFingerprint.getIdentifiedFingerprintIndex();
             } catch (IllegalStateException ise) {
             }
             if (eventStatus == SpassFingerprint.STATUS_AUTHENTIFICATION_SUCCESS)
             {
-                fingerprintAction(fingerprintIndex);
-                myFingerPrintIndex = fingerprintIndex;
+                fingerprintAction(FingerprintIndex);
             }
             else if (eventStatus == SpassFingerprint.STATUS_TIMEOUT_FAILED)
             {
@@ -221,7 +178,6 @@ public class MapsActivity extends AppCompatActivity implements
             }
         }
     };
-
     // ==================================== Activity functions ================================== //
 
     @Override
@@ -258,6 +214,7 @@ public class MapsActivity extends AppCompatActivity implements
         isFeatureEnabled_index = mSpass.isFeatureEnabled(Spass.DEVICE_FINGERPRINT_FINGER_INDEX);
 
         registerBroadcastReceiver();
+        timerHandler.postDelayed(timerRunnable, 0);
     }
 
     @Override
@@ -277,7 +234,6 @@ public class MapsActivity extends AppCompatActivity implements
     {
         mMap = googleMap;
         // Disable map rotation
-//        mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.getUiSettings().setAllGesturesEnabled(false);
 
         //Initialize Google Play Services
@@ -338,12 +294,7 @@ public class MapsActivity extends AppCompatActivity implements
         {
             mCurrLocationMarker.remove();
         }
-
-//        myPosition = new LatLng(location.getLatitude(), location.getLongitude());
-
-        mOurFingerPrint = new OurFingerPrint();
-
-        startIdentify();
+        myPosition = new LatLng(location.getLatitude(), location.getLongitude());
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
@@ -353,63 +304,12 @@ public class MapsActivity extends AppCompatActivity implements
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-//        new MapDirectionsAsyncTask(mMap, myPosition, dest1, MapDirectionsAsyncTask.MODE_DRIVING).execute();
-
-
         // stop location updates
         if (mGoogleApiClient != null)
         {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
-
-    // ============================ Fingerprint functions ======================================= //
-
-    public void startIdentify() {
-        if (onReadyIdentify == false) {
-            try {
-                onReadyIdentify = true;
-                if (mSpassFingerprint != null) {
-                    setIdentifyIndex();
-                    mSpassFingerprint.startIdentify(mOurFingerPrint);
-//                    mSpassFingerprint.startIdentify(mIdentifyListener);
-                }
-            } catch (SpassInvalidStateException ise) {
-                onReadyIdentify = false;
-                resetIdentifyIndex();
-            } catch (IllegalStateException e) {
-                onReadyIdentify = false;
-                resetIdentifyIndex();
-            }
-        }
-    }
-
-    private void setIdentifyIndex() {
-        if (isFeatureEnabled_index) {
-            if (mSpassFingerprint != null && designatedFingers != null)
-            {
-                mSpassFingerprint.setIntendedFingerprintIndex(designatedFingers);
-            }
-        }
-    }
-
-    private void resetIdentifyIndex() {
-        designatedFingers = null;
-    }
-
-    // Program each registered fingerprint with chosen action
-    public void fingerprintAction(int fingerprintIndex) {
-        if (fingerprintIndex == 1)
-        {
-            Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!! finger print index = 1 !!!!!!!!!!!!!!!!!!!");
-//            new MapDirectionsAsyncTask(mMap, myPosition, dest1, MapDirectionsAsyncTask.MODE_DRIVING).execute();
-        }
-        else if (fingerprintIndex == 2)
-        {
-            Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!  finger print index = 2 !!!!!!!!!!!!!!!!!!!");
-        }
-    }
-
     // ============================ Permission related  functions =============================== //
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -472,5 +372,59 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
     {
+    }
+
+    // ============================ Fingerprint functions ======================================= //
+    public void startIdentify() {
+        if (onReadyIdentify == false) {
+            try {
+                onReadyIdentify = true;
+                if (mSpassFingerprint != null) {
+                    setIdentifyIndex();
+                    mSpassFingerprint.startIdentify(mIdentifyListener);
+                }
+            } catch (SpassInvalidStateException ise) {
+                onReadyIdentify = false;
+                resetIdentifyIndex();
+            } catch (IllegalStateException e) {
+                onReadyIdentify = false;
+                resetIdentifyIndex();
+            }
+        }
+    }
+
+    private void setIdentifyIndex() {
+        if (isFeatureEnabled_index) {
+            if (mSpassFingerprint != null && designatedFingers != null)
+            {
+                mSpassFingerprint.setIntendedFingerprintIndex(designatedFingers);
+            }
+        }
+    }
+
+    private void resetIdentifyIndex() {
+        designatedFingers = null;
+    }
+
+    // Program each registered fingerprint with chosen action
+    public void fingerprintAction(int fingerprintIndex) {
+        if (fingerprintIndex == 1)
+        {
+            Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!! finger print index = 1 !!!!!!!!!!!!!!!!!!!");
+            mMap.clear();
+            new MapDirectionsAsyncTask(mMap, myPosition, dest1, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+        }
+        else if (fingerprintIndex == 2)
+        {
+            Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!  finger print index = 2 !!!!!!!!!!!!!!!!!!!");
+            mMap.clear();
+            new MapDirectionsAsyncTask(mMap, myPosition, dest2, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+        }
+        else if (fingerprintIndex == 3)
+        {
+            Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!  finger print index = 3 !!!!!!!!!!!!!!!!!!!");
+            mMap.clear();
+            new MapDirectionsAsyncTask(mMap, myPosition, dest3, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+        }
     }
 }
