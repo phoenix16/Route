@@ -68,10 +68,8 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
             InputStream in = response.getEntity().getContent();
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = builder.parse(in);
-                Log.d(TAG, "---- LOCATION FOUND!!!!!!!!!!!!!!!!!!!!!!! ----");
             return doc;
             } catch (Exception e) {
-                Log.d(TAG, "---- LOCATION NOT FOUND!!!!!!!!!!!!!!!!!!!!!!! ----");
             e.printStackTrace();
             }
             return null;
