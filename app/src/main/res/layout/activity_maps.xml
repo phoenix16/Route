@@ -4,4 +4,5 @@
     android:layout_height="match_parent"
     android:id="@+id/map"
     tools:context=".MapsActivity"
+    class="com.apps.prakriti.route.MySupportMapFragment"
     android:name="com.google.android.gms.maps.SupportMapFragment"/>

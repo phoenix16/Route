@@ -80,7 +80,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
     {
         if (result != null)
         {
-            Log.d(TAG, "---- MapDirectionsAsyncTask OK ----");
+//            Log.d(TAG, "---- MapDirectionsAsyncTask OK ----");
             try {
                 Message message = new Message();
                 message.obj = result;
@@ -97,7 +97,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
 
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(this.start.latitude, this.start.longitude))      // Sets the center of the map to location user
-                        .zoom(6)                   // Sets the zoom
+                        .zoom(8)                   // Sets the zoom
                         .bearing(0)                // Sets the orientation of the camera to east = 90
                         .tilt(0)                   // Sets the tilt of the camera to 30 degrees
                         .build();                   // Creates a CameraPosition from the builder
@@ -109,7 +109,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
                 Polyline polylin = mMap.addPolyline(rectLine);
                 String timeToDest = md.getDurationText(doc);
 
-                Log.d(TAG, timeToDest + "---- timeToDest !!!!!!!!!!!!----");
+//                Log.d(TAG, timeToDest + "---- timeToDest !!!!!!!!!!!!----");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -117,7 +117,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
         }
         else
         {
-            Log.d(TAG, "---- MapDirectionsAsyncTask ERROR ----");
+//            Log.d(TAG, "---- MapDirectionsAsyncTask ERROR ----");
         }
     }
 
@@ -128,7 +128,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
             Node node1 = nl1.item(nl1.getLength() - 1);
             NodeList nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "text"));
-            Log.i("DurationText", node2.getTextContent());
+//            Log.i("DurationText", node2.getTextContent());
             return node2.getTextContent();
         } catch (Exception e) {
             return "0";
@@ -141,7 +141,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
             Node node1 = nl1.item(nl1.getLength() - 1);
             NodeList nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "value"));
-            Log.i("DurationValue", node2.getTextContent());
+//            Log.i("DurationValue", node2.getTextContent());
             return Integer.parseInt(node2.getTextContent());
         } catch (Exception e) {
             return -1;
@@ -157,7 +157,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
             NodeList nl2 = null;
             nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "value"));
-            Log.d("DistanceText", node2.getTextContent());
+//            Log.d("DistanceText", node2.getTextContent());
             return node2.getTextContent();
         } catch (Exception e) {
             return "-1";
@@ -171,7 +171,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
             node1 = nl1.item(nl1.getLength() - 1);
             NodeList nl2 = node1.getChildNodes();
             Node node2 = nl2.item(getNodeIndex(nl2, "value"));
-            Log.i("DistanceValue", node2.getTextContent());
+//            Log.i("DistanceValue", node2.getTextContent());
             return Integer.parseInt(node2.getTextContent());
         } catch (Exception e) {
             return -1;
@@ -182,7 +182,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
         try {
             NodeList nl1 = doc.getElementsByTagName("start_address");
             Node node1 = nl1.item(0);
-            Log.i("StartAddress", node1.getTextContent());
+//            Log.i("StartAddress", node1.getTextContent());
             return node1.getTextContent();
         } catch (Exception e) {
             return "-1";
@@ -193,7 +193,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
         try {
             NodeList nl1 = doc.getElementsByTagName("end_address");
             Node node1 = nl1.item(0);
-            Log.i("StartAddress", node1.getTextContent());
+//            Log.i("StartAddress", node1.getTextContent());
             return node1.getTextContent();
         } catch (Exception e) {
             return "-1";
@@ -203,7 +203,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
         try {
             NodeList nl1 = doc.getElementsByTagName("copyrights");
             Node node1 = nl1.item(0);
-            Log.i("CopyRights", node1.getTextContent());
+//            Log.i("CopyRights", node1.getTextContent());
             return node1.getTextContent();
         } catch (Exception e) {
             return "-1";
