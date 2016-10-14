@@ -53,7 +53,7 @@ public class MapsActivity extends AppCompatActivity implements
     Location mLastLocation;
     Marker mCurrLocationMarker;
     private static final String TAG = MapsActivity.class.getSimpleName();
-//    private MapDirectionsAsyncTask mMapTask;
+    private MapDirectionsAsyncTask mMapTask;
 
     LatLng myLocationLatLng;
     LatLng closestGasStation = new LatLng(37.404758, -121.902449);
@@ -66,6 +66,7 @@ public class MapsActivity extends AppCompatActivity implements
         @Override
         public void run()
         {
+            Log.d (TAG, "!!!!!!!!!!!!!!!! START IDENTIFY CALLED !!!!!!!!!!!!!!!");
             startIdentify();
             timerHandler.postDelayed(this, 1000);
         }
@@ -407,7 +408,10 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     // Program each registered fingerprint with chosen action
-    public void fingerprintAction(int fingerprintIndex) {
+    public void fingerprintAction(int fingerprintIndex)
+    {
+//        if (1 == 1)
+//            return;
         if (fingerprintIndex == 1)
         {
             Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!! finger print index = 1 !!!!!!!!!!!!!!!!!!!");
@@ -422,9 +426,9 @@ public class MapsActivity extends AppCompatActivity implements
             MarkerOptions marker = new MarkerOptions();
             marker.position(closestGasStation).title("Gas Station");
             mMap.addMarker(marker);
-//            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestGasStation, MapDirectionsAsyncTask.MODE_DRIVING);
-//            mMapTask.execute();
-            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestGasStation, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestGasStation, MapDirectionsAsyncTask.MODE_DRIVING);
+            mMapTask.execute();
+//            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestGasStation, MapDirectionsAsyncTask.MODE_DRIVING).execute();
         }
         else if (fingerprintIndex == 2)
         {
@@ -440,9 +444,9 @@ public class MapsActivity extends AppCompatActivity implements
             MarkerOptions marker = new MarkerOptions();
             marker.position(closestParkingLot).title("Parking Lot");
             mMap.addMarker(marker);
-//            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestParkingLot, MapDirectionsAsyncTask.MODE_DRIVING);
-//            mMapTask.execute();
-            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestParkingLot, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestParkingLot, MapDirectionsAsyncTask.MODE_DRIVING);
+            mMapTask.execute();
+//            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestParkingLot, MapDirectionsAsyncTask.MODE_DRIVING).execute();
         }
 
         else if (fingerprintIndex == 3)
@@ -459,9 +463,9 @@ public class MapsActivity extends AppCompatActivity implements
             MarkerOptions marker = new MarkerOptions();
             marker.position(closestChipotle).title("Chipotle");
             mMap.addMarker(marker);
-//            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestChipotle, MapDirectionsAsyncTask.MODE_DRIVING);
-//            mMapTask.execute();
-            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestChipotle, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestChipotle, MapDirectionsAsyncTask.MODE_DRIVING);
+            mMapTask.execute();
+//            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestChipotle, MapDirectionsAsyncTask.MODE_DRIVING).execute();
         }
     }
 }
