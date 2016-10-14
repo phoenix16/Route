@@ -89,20 +89,7 @@ public class MapDirectionsAsyncTask extends AsyncTask<String, Void, Document>
                 ArrayList<LatLng> directionPoint = md.getDirections(doc);
                 PolylineOptions rectLine = new PolylineOptions().width(15).color(Color.BLUE);
 
-                mMap.addMarker(new MarkerOptions().position(this.start).title("Source"));
-                mMap.addMarker(new MarkerOptions().position(this.end).title("Destination"));
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(this.end));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(this.end.latitude, this.end.longitude), 13));
-
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(this.start.latitude, this.start.longitude))      // Sets the center of the map to location user
-                        .zoom(8)                   // Sets the zoom
-                        .bearing(0)                // Sets the orientation of the camera to east = 90
-                        .tilt(0)                   // Sets the tilt of the camera to 30 degrees
-                        .build();                   // Creates a CameraPosition from the builder
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
+                // UI operation : Add polylines
                 for (int i = 0; i < directionPoint.size(); i++) {
                     rectLine.add(directionPoint.get(i));
                 }

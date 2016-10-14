@@ -53,23 +53,21 @@ public class MapsActivity extends AppCompatActivity implements
     Location mLastLocation;
     Marker mCurrLocationMarker;
     private static final String TAG = MapsActivity.class.getSimpleName();
+//    private MapDirectionsAsyncTask mMapTask;
 
-    public static boolean mMapIsTouched = false;
-
-    LatLng myPosition;
-    int myFingerPrintIndex = 0;
-
-    LatLng dest1 = new LatLng(37.774929, -122.419416); // SF
-    LatLng dest2 = new LatLng(34.052234, -118.243685); // LA
-    LatLng dest3 = new LatLng(40.712784, -74.005941);  // NY
+    LatLng myLocationLatLng;
+    LatLng closestGasStation = new LatLng(37.404758, -121.902449);
+    LatLng closestParkingLot = new LatLng(37.336683, -121.892238);
+    LatLng closestChipotle = new LatLng(37.383115, -121.897013);
 
     // ====================== Set up timer to keep listening to fingerprint ======================//
     private Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
         @Override
-        public void run() {
+        public void run()
+        {
             startIdentify();
-            timerHandler.postDelayed(this, 500);
+            timerHandler.postDelayed(this, 1000);
         }
     };
 
@@ -210,10 +208,11 @@ public class MapsActivity extends AppCompatActivity implements
         } else {
             return;
         }
-
         isFeatureEnabled_index = mSpass.isFeatureEnabled(Spass.DEVICE_FINGERPRINT_FINGER_INDEX);
 
         registerBroadcastReceiver();
+
+        // Enable the timer
         timerHandler.postDelayed(timerRunnable, 0);
     }
 
@@ -294,10 +293,11 @@ public class MapsActivity extends AppCompatActivity implements
         {
             mCurrLocationMarker.remove();
         }
-        myPosition = new LatLng(location.getLatitude(), location.getLongitude());
+        myLocationLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
+        // Intial camera view: Aerial view of cities around myLocation
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                .target(new LatLng(location.getLatitude(), location.getLongitude()))
                 .zoom(8)                   // Sets the zoom
                 .bearing(0)                // Sets the orientation of the camera to east = 90
                 .tilt(0)                   // Sets the tilt of the camera to 30 degrees
@@ -412,19 +412,56 @@ public class MapsActivity extends AppCompatActivity implements
         {
             Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!! finger print index = 1 !!!!!!!!!!!!!!!!!!!");
             mMap.clear();
-            new MapDirectionsAsyncTask(mMap, myPosition, dest1, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(myLocationLatLng.latitude+0.002f, myLocationLatLng.longitude-0.003f))
+                    .zoom(14)                   // Sets the zoom
+                    .bearing(0)                // Sets the orientation of the camera to east = 90
+                    .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(closestGasStation).title("Gas Station");
+            mMap.addMarker(marker);
+//            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestGasStation, MapDirectionsAsyncTask.MODE_DRIVING);
+//            mMapTask.execute();
+            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestGasStation, MapDirectionsAsyncTask.MODE_DRIVING).execute();
         }
         else if (fingerprintIndex == 2)
         {
             Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!  finger print index = 2 !!!!!!!!!!!!!!!!!!!");
             mMap.clear();
-            new MapDirectionsAsyncTask(mMap, myPosition, dest2, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(myLocationLatLng.latitude-0.03f, myLocationLatLng.longitude-0.003f))
+                    .zoom(13)                   // Sets the zoom
+                    .bearing(0)                // Sets the orientation of the camera to east = 90
+                    .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(closestParkingLot).title("Parking Lot");
+            mMap.addMarker(marker);
+//            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestParkingLot, MapDirectionsAsyncTask.MODE_DRIVING);
+//            mMapTask.execute();
+            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestParkingLot, MapDirectionsAsyncTask.MODE_DRIVING).execute();
         }
+
         else if (fingerprintIndex == 3)
         {
             Log.d(TAG, " !!!!!!!!!!!!!!!!!!!!  finger print index = 3 !!!!!!!!!!!!!!!!!!!");
             mMap.clear();
-            new MapDirectionsAsyncTask(mMap, myPosition, dest3, MapDirectionsAsyncTask.MODE_DRIVING).execute();
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(myLocationLatLng.latitude-0.003f, myLocationLatLng.longitude-0.003f))
+                    .zoom(15)                   // Sets the zoom
+                    .bearing(0)                // Sets the orientation of the camera to east = 90
+                    .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(closestChipotle).title("Chipotle");
+            mMap.addMarker(marker);
+//            mMapTask = new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestChipotle, MapDirectionsAsyncTask.MODE_DRIVING);
+//            mMapTask.execute();
+            new MapDirectionsAsyncTask(mMap, myLocationLatLng, closestChipotle, MapDirectionsAsyncTask.MODE_DRIVING).execute();
         }
     }
 }
