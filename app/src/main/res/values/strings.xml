@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Route</string>
     <string name="title_activity_maps">Route</string>
-    <string name="no_demos">No demos</string>
-    <string name="google_maps_key">AIzaSyCS5xKtzSyWnVIIB8WSReG7S2SSRZfOKzE</string>
+    <string name="google_maps_key">AIzaSyA8ccMUwTqBSw9aGnFPlB1RY5q5wzjDxTk</string>
 </resources>
