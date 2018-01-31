@@ -13,4 +13,4 @@ For example, touch the fingerprint sensor with
   - finger 2 to route to closest parking lot
   - finger 3 to route to closest gas station.
   
-This app has been tested on a Samsung Galaxy S5, which permits a user register up to 3 fingerprints. 
+This app has been tested on a Samsung Galaxy S5, which permits a user enroll up to 3 fingerprints. 
