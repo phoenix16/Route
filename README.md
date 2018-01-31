@@ -1,11 +1,13 @@
 # Route
 Route to your favorite destinations using your fingerprints!
 
-Android app that links the Samsung Fingerprint API with the Google Maps API so that each of the user's registered fingerprints
-can be programmed to route to a particular location.
+This is an Android app that lets a user associate a location on google maps with a particular enrolled fingerprint.
+This creates location shortcuts that can be accessed with one's fingerprints.
+
+This app links the Samsung Fingerprint API with the Google Maps API to associate each fingerprint with a chosen location.
 
 For example, touch/swipe the fingerprint sensor with 
-  - finger 1 to route to your home location
+  - finger 1 to route home
   - finger 2 to route to closest parking lot
   - finger 3 to route to closest gas station.
   
