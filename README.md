@@ -1,7 +1,7 @@
 # Route
 Route to your favorite destinations using your fingerprints!
 
-This is an Android app that lets a user associate a location on google maps with a particular enrolled fingerprint.
+This is an Android app that lets a user associate a location on google maps with an enrolled fingerprint.
 This creates location shortcuts that can be accessed with one's fingerprints. 
 This app links the Samsung Fingerprint API with the Google Maps API to associate each fingerprint with a chosen location.
 
