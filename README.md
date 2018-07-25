@@ -6,6 +6,7 @@ This creates location shortcuts that can be accessed with one's fingerprints.
 This app links the Samsung Fingerprint API with the Google Maps API to associate each fingerprint with a chosen location.
 
 Sample usage:
+
 Imagine you are driving in downtown San Francisco looking for parking. Instead of looking for parking in Google Maps on your phone while driving distractedly, you could touch your phone's fingerprint sensor to get driving directions to the closest parking lot.
 
 For example, program the fingerprint sensor with 
