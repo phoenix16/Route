@@ -8,7 +8,7 @@ Imagine you are looking for parking in downtown San Francisco (a near impossible
 Implementation:
 
 This is an Android app that lets a user associate a location on google maps with an enrolled fingerprint.
-This creates location shortcuts that can be accessed with one's fingerprints. 
+It creates location shortcuts that can be accessed with one's fingerprints. 
 This app links the Samsung Fingerprint API with the Google Maps API to associate each fingerprint with a chosen location.
 
 Associate each enrolled fingerprint with a destination. For example,
