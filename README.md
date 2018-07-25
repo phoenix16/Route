@@ -7,11 +7,11 @@ This app links the Samsung Fingerprint API with the Google Maps API to associate
 
 Sample usage:
 
-Imagine you are driving in downtown San Francisco looking for parking. Instead of looking for parking in Google Maps on your phone while driving distractedly, you could touch your phone's fingerprint sensor to get driving directions to the closest parking lot.
+Imagine you are looking for parking in downtown San Francisco. Touching the fingerprint sensor on your phone will route you to the nearest parking lot.
 
-For example, program the fingerprint sensor with 
+Associate each enrolled fingerprint with a destination. For example,
   - finger 1 to route home
-  - finger 2 to route to closest parking lot
-  - finger 3 to route to closest gas station.
+  - finger 2 to route to nearest parking lot
+  - finger 3 to route to nearest gas station.
   
 This app has been tested on a Samsung Galaxy S5, which permits a user enroll up to 3 fingerprints. 
