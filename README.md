@@ -1,10 +1,12 @@
 # Route
 Route to your favorite destinations using your fingerprints!
 
-Sample usage: 
+Sample usage:
+
 Imagine you are looking for parking in downtown San Francisco (a near impossible feat). Instead of looking for a parking lot on Google maps while driving distractedly, you could instead touch the fingerprint sensor on your phone to route to the nearest parking lot.
 
-Implementation: 
+Implementation:
+
 This is an Android app that lets a user associate a location on google maps with an enrolled fingerprint.
 This creates location shortcuts that can be accessed with one's fingerprints. 
 This app links the Samsung Fingerprint API with the Google Maps API to associate each fingerprint with a chosen location.
